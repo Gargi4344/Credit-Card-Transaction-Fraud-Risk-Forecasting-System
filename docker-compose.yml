@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: fraud_forecast
+      POSTGRES_USER: fraud_user
+      POSTGRES_PASSWORD: fraud_password
+    ports: ["5434:5432"]
+    volumes: [fraud_pg:/var/lib/postgresql/data, ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro]
+  api:
+    build: {context: ., dockerfile: api/Dockerfile}
+    environment:
+      DATABASE_URL: postgresql+psycopg://fraud_user:fraud_password@postgres:5432/fraud_forecast
+      ARTIFACT_DIR: /app/artifacts
+    ports: ["8010:8000"]
+    volumes: [./artifacts:/app/artifacts]
+    depends_on: [postgres]
+  dashboard:
+    build: {context: ., dockerfile: dashboard/Dockerfile}
+    environment: {API_BASE_URL: http://api:8000}
+    ports: ["8510:8501"]
+    depends_on: [api]
+volumes:
+  fraud_pg:
