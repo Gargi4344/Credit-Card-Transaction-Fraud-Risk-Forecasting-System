@@ -1,0 +1,24 @@
+# Dataset (not redistributed; download from Kaggle)
+data/
+
+# Generated models and forecasts
+artifacts/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Spark
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Env and editor
+.env
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
